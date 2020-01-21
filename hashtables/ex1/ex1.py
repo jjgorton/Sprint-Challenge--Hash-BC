@@ -12,6 +12,23 @@ def get_indices_of_item_weights(weights, length, limit):
     """
     YOUR CODE HERE
     """
+    index = 0
+    for w in weights:
+        hash_table_insert(ht, w, index)
+        index += 1
+    
+    for w in range(length):
+        if hash_table_retrieve(ht, limit - weights[w]) is not None:
+            if hash_table_retrieve(ht, weights[w]) > hash_table_retrieve(ht, limit-weights[w]):
+                greater = weights[w]
+                less = limit - weights[w]
+            else:
+                greater = limit - weights[w]
+                less = weights[w]
+                print(f'greater: {greater}, less: {less}')
+                print(hash_table_retrieve(ht, greater))
+
+            return [hash_table_retrieve(ht, greater), hash_table_retrieve(ht, less)]
 
     return None
 
