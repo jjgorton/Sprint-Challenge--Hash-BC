@@ -14,22 +14,34 @@ def get_indices_of_item_weights(weights, length, limit):
     """
     index = 0
     for w in weights:
-        hash_table_insert(ht, w, index)
+        if hash_table_retrieve(ht, w) is None:
+            hash_table_insert(ht, w, index)
+        else:
+            hash_table_insert(ht, w*1000, index)
         index += 1
     
     for w in range(length):
-        if hash_table_retrieve(ht, limit - weights[w]) is not None:
+        if hash_table_retrieve(ht, (limit - weights[w])*1000) is not None:
+            greater = (limit - weights[w])*1000
+            less = weights[w]
+
+        elif hash_table_retrieve(ht, limit - weights[w]) is not None:
             if hash_table_retrieve(ht, weights[w]) > hash_table_retrieve(ht, limit-weights[w]):
                 greater = weights[w]
                 less = limit - weights[w]
             else:
                 greater = limit - weights[w]
                 less = weights[w]
-                print(f'greater: {greater}, less: {less}')
-                print(hash_table_retrieve(ht, greater))
+            
+        else:
+            continue
+            
 
-            return [hash_table_retrieve(ht, greater), hash_table_retrieve(ht, less)]
-
+        first = hash_table_retrieve(ht, greater)
+        second = hash_table_retrieve(ht, less)
+        hash_table_remove(ht, greater)
+        hash_table_remove(ht, less)
+        return (first, second)
     return None
 
 
